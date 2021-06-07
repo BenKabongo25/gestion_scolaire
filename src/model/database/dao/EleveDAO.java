@@ -140,10 +140,10 @@ public class EleveDAO extends DaoID<Eleve> {
                     ResultSet.CONCUR_READ_ONLY);
             statement.setInt(1, eleve.getId());
             ResultSet resultSet = statement.executeQuery();
+            AnneeScolaireDAO anneeScolaireDAO = new AnneeScolaireDAO(connection);
+            ClasseDAO classeDAO = new ClasseDAO(connection);
             while (resultSet.next()) {
-                AnneeScolaireDAO anneeScolaireDAO = new AnneeScolaireDAO(connection);
                 AnneeScolaire anneeScolaire = anneeScolaireDAO.getById(resultSet.getInt("anneeScolaireId"));
-                ClasseDAO classeDAO = new ClasseDAO(connection);
                 Classe classe = classeDAO.getById(resultSet.getInt("classeId"));
                 if (anneeScolaire != null && classe != null)
                     eleve.addAnneeScolaireClasse(anneeScolaire, classe);

@@ -1,4 +1,4 @@
-package model.base;
+package model.entites.utils;
 
 public abstract class Identifable {
 

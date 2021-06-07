@@ -20,8 +20,8 @@ public class CoursDAO extends DaoType1<Cours> {
             PreparedStatement statement = connection.prepareStatement(sql,
                     ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_READ_ONLY);
-            statement.setString(1, "nom");
-            statement.setString(2, "code");
+            statement.setString(1, obj.getNom());
+            statement.setString(2, obj.getCode());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

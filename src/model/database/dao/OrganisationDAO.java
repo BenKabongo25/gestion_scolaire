@@ -82,8 +82,8 @@ public class OrganisationDAO extends DaoType1<Organisation> {
                     ResultSet.CONCUR_READ_ONLY);
             statement.setInt(1, organisation.getId());
             ResultSet resultSet = statement.executeQuery();
+            SessionDAO sessionDAO = new SessionDAO(connection);
             while (resultSet.next()) {
-                SessionDAO sessionDAO = new SessionDAO(connection);
                 Session session = sessionDAO.getById(resultSet.getInt("id"));
                 if (session != null)
                     organisation.addSession(session);

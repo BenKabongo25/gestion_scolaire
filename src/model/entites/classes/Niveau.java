@@ -1,6 +1,6 @@
 package model.entites.classes;
 
-import model.base.Type1;
+import model.entites.utils.Type1;
 
 import java.util.HashSet;
 import java.util.Objects;

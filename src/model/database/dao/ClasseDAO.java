@@ -2,6 +2,7 @@ package model.database.dao;
 
 import model.entites.classes.Classe;
 import model.entites.classes.Section;
+import model.entites.organisation.AnneeScolaire;
 import model.entites.organisation.Organisation;
 import model.entites.personnes.eleves.Eleve;
 
@@ -92,7 +93,29 @@ public class ClasseDAO extends DaoID<Classe> {
             e.printStackTrace();
             return null;
         }
+        addAnneesScolairesEleves(classe);
         return classe;
     }
 
+    private void addAnneesScolairesEleves(Classe classe) {
+        try {
+            String sql = "SELECT * FROM ElevesAnneesScolaires WHERE classeId = ?";
+            PreparedStatement statement = connection.prepareStatement(sql,
+                    ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY);
+            statement.setInt(1, classe.getId());
+            ResultSet resultSet = statement.executeQuery();
+            AnneeScolaireDAO anneeScolaireDAO = new AnneeScolaireDAO(connection);
+            EleveDAO eleveDAO = new EleveDAO(connection);
+            while (resultSet.next()) {
+                AnneeScolaire anneeScolaire = anneeScolaireDAO
+                        .getById(resultSet.getInt("anneeScolaireId"));
+                Eleve eleve = eleveDAO.getById(resultSet.getInt("eleveId"));
+                if (anneeScolaire != null && eleve != null)
+                    classe.addAnneeScolaireEleve(anneeScolaire, eleve);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

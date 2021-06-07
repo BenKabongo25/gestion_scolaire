@@ -1,6 +1,6 @@
 package model.entites.personnes.base;
 
-import model.base.Identifable;
+import model.entites.utils.Identifable;
 
 import java.util.Objects;
 

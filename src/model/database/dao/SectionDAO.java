@@ -85,8 +85,8 @@ public class SectionDAO extends DaoType1<Section> {
                     ResultSet.CONCUR_READ_ONLY);
             statement.setInt(1, section.getId());
             ResultSet resultSet = statement.executeQuery();
+            ClasseDAO classeDAO = new ClasseDAO(connection);
             while (resultSet.next()) {
-                ClasseDAO classeDAO = new ClasseDAO(connection);
                 Classe classe = classeDAO.getById(resultSet.getInt("id"));
                 if (classe != null)
                     section.addClasse(classe);

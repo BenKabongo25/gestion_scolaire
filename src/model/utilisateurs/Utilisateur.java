@@ -1,6 +1,6 @@
 package model.utilisateurs;
 
-import model.base.Identifable;
+import model.entites.utils.Identifable;
 
 public class Utilisateur extends Identifable {
 

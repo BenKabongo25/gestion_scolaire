@@ -1,6 +1,6 @@
 package model.entites.organisation;
 
-import model.base.Type1;
+import model.entites.utils.Type1;
 
 import java.util.Objects;
 

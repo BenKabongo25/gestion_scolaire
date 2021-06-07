@@ -1,6 +1,6 @@
 package model.entites.cours;
 
-import model.base.Type1;
+import model.entites.utils.Type1;
 
 public class Cours extends Type1 {
 

@@ -1,11 +1,12 @@
 package model.entites.classes;
 
-import model.base.Identifable;
+import model.entites.utils.Identifable;
 import model.entites.organisation.AnneeScolaire;
 import model.entites.organisation.Organisation;
 import model.entites.personnes.eleves.Eleve;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -119,8 +120,33 @@ public class Classe extends Identifable {
         anneesScolairesEleves.put(anneeScolaire, eleves);
     }
 
+    public void addAnneeScolaireEleve(AnneeScolaire anneeScolaire,
+                                      Eleve eleve) {
+        if (anneesScolairesEleves.containsKey(anneeScolaire))
+            anneesScolairesEleves.put(anneeScolaire, new HashSet<>());
+
+        Set<Eleve> eleves = anneesScolairesEleves.get(anneeScolaire);
+        if (eleves == null)
+            eleves = new HashSet<>();
+
+        eleves.add(eleve);
+        // anneesScolairesEleves.put(anneeScolaire, eleves);
+    }
+
     public void removeAnneeScolaireEleves(AnneeScolaire anneeScolaire) {
         anneesScolairesEleves.remove(anneeScolaire);
     }
 
+    public void removeAnneeScolaireEleve(AnneeScolaire anneeScolaire,
+                                         Eleve eleve) {
+        if (anneesScolairesEleves.containsKey(anneeScolaire))
+            anneesScolairesEleves.put(anneeScolaire, new HashSet<>());
+
+        Set<Eleve> eleves = anneesScolairesEleves.get(anneeScolaire);
+        if (eleves == null)
+            eleves = new HashSet<>();
+
+        eleves.remove(eleve);
+        // anneesScolairesEleves.put(anneeScolaire, eleves);
+    }
 }

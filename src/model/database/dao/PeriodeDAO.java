@@ -20,11 +20,13 @@ public class PeriodeDAO extends DaoID<Periode> {
                 " (nom, code, sessionId, periodeId) " +
                 " VALUES (?,?,?,?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, obj.getSession().getId());
-            statement.setInt(2, obj.getPeriodeId());
-            statement.setString(3, obj.getNom());
-            statement.setString(4, obj.getCode());
+            PreparedStatement statement = connection.prepareStatement(sql,
+                    ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY);
+            statement.setString(1, obj.getNom());
+            statement.setString(2, obj.getCode());
+            statement.setInt(3, obj.getSession().getId());
+            statement.setInt(4, obj.getPeriodeId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -36,14 +38,16 @@ public class PeriodeDAO extends DaoID<Periode> {
     @Override
     public boolean update(Periode obj) {
         String sql = "UPDATE Periodes SET " +
-                "  = ?, periodeId = ?, nom = ?, code = ? " +
+                " nom = ?, code = ?, sessionId = ?, periodeId = ? " +
                 " WHERE id = ? ";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, obj.getOrganisation().getId());
-            statement.setInt(2, obj.getPeriodeId());
-            statement.setString(3, obj.getNom());
-            statement.setString(4, obj.getCode());
+            PreparedStatement statement = connection.prepareStatement(sql,
+                    ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY);
+            statement.setString(1, obj.getNom());
+            statement.setString(2, obj.getCode());
+            statement.setInt(3, obj.getSession().getId());
+            statement.setInt(4, obj.getPeriodeId());
             statement.setInt(5, obj.getId());
             statement.executeUpdate();
         } catch (SQLException e) {

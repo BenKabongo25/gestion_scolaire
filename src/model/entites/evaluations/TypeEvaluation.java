@@ -1,6 +1,6 @@
 package model.entites.evaluations;
 
-import model.base.Type1;
+import model.entites.utils.Type1;
 
 public class TypeEvaluation extends Type1 {
 

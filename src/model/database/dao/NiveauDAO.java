@@ -1,6 +1,5 @@
 package model.database.dao;
 
-import model.entites.classes.Classe;
 import model.entites.classes.Niveau;
 import model.entites.classes.Section;
 
@@ -77,8 +76,8 @@ public class NiveauDAO extends DaoType1<Niveau> {
                     ResultSet.CONCUR_READ_ONLY);
             statement.setInt(1, niveau.getId());
             ResultSet resultSet = statement.executeQuery();
+            SectionDAO sectionDAO = new SectionDAO(connection);
             while (resultSet.next()) {
-                SectionDAO sectionDAO = new SectionDAO(connection);
                 Section section = sectionDAO.getById(resultSet.getInt("id"));
                 if (section != null)
                     niveau.addSection(section);

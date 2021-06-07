@@ -13,6 +13,8 @@ public class Init {
         try {
             statement = connection.createStatement();
 
+            // GESTION DES ELEVES
+
             // Années scolaires, organisations, sessions, périodes
 
             sql = "CREATE TABLE IF NOT EXISTS AnneesScolaires (" +
@@ -82,7 +84,7 @@ public class Init {
                     ")";
             statement.execute(sql);
 
-            // cours et unités d'enseignements
+            // Cours et unités d'enseignements
 
             sql = "CREATE TABLE IF NOT EXISTS Cours (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -95,6 +97,15 @@ public class Init {
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "noms VARCHAR(100) NOT NULL," +
                     "code VARCHAR(100) NOT NULL" +
+                    ")";
+            statement.execute(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS CoursUnitesEnseignements (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "coursId INTEGER NOT NULL," +
+                    "uniteEnseignementId INTEGER NOT NULL," +
+                    "FOREIGN KEY (coursId) REFERENCES Cours(Id)," +
+                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(Id)" +
                     ")";
             statement.execute(sql);
 
@@ -133,50 +144,36 @@ public class Init {
 
             // Elèves et année scolaire
             sql = "CREATE TABLE IF NOT EXISTS ElevesAnneesScolaires (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "eleveId INTEGER NOT NULL," +
                     "anneeScolaireId INTEGER NOT NULL," +
-                    "classeId INTEGER" +
-                    "PRIMARY KEY (eleveId, anneeScolaireId)," +
+                    "classeId INTEGER," +
+                    // "PRIMARY KEY (eleveId, anneeScolaireId)," +
                     "FOREIGN KEY (eleveId) REFERENCES Eleves(id)," +
-                    "FOREIGN KEY (anneeScolaireId) REFERENCES AnneesScolaires(id) " +
+                    "FOREIGN KEY (anneeScolaireId) REFERENCES AnneesScolaires(id)," +
                     "FOREIGN KEY (classeId) REFERENCES Classes(Id)" +
                     ")";
             statement.execute(sql);
 
-
-            // table des tuteurs
-            // TODO : ajouter la colonne photo
-            sql = "CREATE TABLE IF NOT EXISTS Tuteurs (" +
+            // Elèves, années scolaires, unités d'enseignements
+            sql = "CREATE TABLE IF NOT EXISTS ElevesAnneesScolairesUnitesEnseignements (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "noms VARCHAR(100) NOT NULL," +
-                    "prenom VARCHAR(100) NOT NULL," +
-                    "sexe INTEGER NOT NULL," +
-                    "dateNaissance DATE," +
-                    "telephone VARCHAR(20)," +
-                    "email VARCHAR(255)," +
-                    "adresse TEXT," +
-                    "profession VARCHAR(255)" +
+                    "eleveAnneeScolaireId INTEGER NOT NULL," +
+                    "uniteEnseignementId INTEGER NOT NULL," +
+                    "FOREIGN KEY (eleveAnneeScolaireId) REFERENCES ElevesAnneesScolaires(id)," +
+                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(Id)" +
                     ")";
             statement.execute(sql);
 
-            // table association tuteurs - élèves
-            sql = "CREATE TABLE IF NOT EXISTS TuteursEleves (" +
-                    "tuteurId INTEGER NOT NULL," +
-                    "eleveId INTEGER NOT NULL," +
-                    "PRIMARY KEY (tuteurId, eleveId)," +
-                    "FOREIGN KEY (tuteurId) REFERENCES Tuteurs(Id)," +
-                    "FOREIGN KEY (eleveId) REFERENCES Eleves(Id)" +
-                    ")";
-            statement.execute(sql);
-
-
-            // table association cours - élèves
-            sql = "CREATE TABLE IF NOT EXISTS CoursEleves (" +
-                    "coursId INTEGER NOT NULL," +
-                    "eleveId INTEGER NOT NULL," +
-                    "PRIMARY KEY (coursId, eleveId)," +
-                    "FOREIGN KEY (coursId) REFERENCES Cours(Id)," +
-                    "FOREIGN KEY (eleveId) REFERENCES Eleves(Id)" +
+            // Périodes, unités d'enseignements, classes
+            sql = "CREATE TABLE IF NOT EXISTS PeriodesUnitesEnseignementsClasses (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "periodeId INTEGER NOT NULL," +
+                    "uniteEnseignementId INTEGER NOT NULL," +
+                    "classeId INTEGER NOT NULL," +
+                    "FOREIGN KEY (periodeId) REFERENCES Periodes(Id)," +
+                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(Id)," +
+                    "FOREIGN KEY (classeId) REFERENCES Classes(Id)" +
                     ")";
             statement.execute(sql);
 
