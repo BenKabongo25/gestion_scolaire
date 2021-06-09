@@ -5,6 +5,7 @@ import model.entites.organisation.AnneeScolaire;
 import model.entites.personnes.base.Adresse;
 import model.entites.personnes.base.Sexe;
 import model.entites.personnes.eleves.Eleve;
+import model.entites.personnes.eleves.Tuteur;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -129,29 +130,30 @@ public class EleveDAO extends DaoID<Eleve> {
             return null;
         }
         addAnneesScolairesInfos(eleve);
+        addTuteurs(eleve);
         return eleve;
     }
 
     private void addAnneesScolairesInfos(Eleve eleve) {
+
+    }
+
+    private void addTuteurs(Eleve eleve) {
         try {
-            String sql = "SELECT * FROM ElevesAnneesScolaires WHERE eleveId = ?";
+            String sql = "SELECT * FROM TuteursEleves WHERE eleveId = ?";
             PreparedStatement statement = connection.prepareStatement(sql,
                     ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_READ_ONLY);
             statement.setInt(1, eleve.getId());
             ResultSet resultSet = statement.executeQuery();
-            AnneeScolaireDAO anneeScolaireDAO = new AnneeScolaireDAO(connection);
-            ClasseDAO classeDAO = new ClasseDAO(connection);
+            TuteurDAO tuteurDAO = new TuteurDAO(connection);
             while (resultSet.next()) {
-                AnneeScolaire anneeScolaire = anneeScolaireDAO.getById(resultSet.getInt("anneeScolaireId"));
-                Classe classe = classeDAO.getById(resultSet.getInt("classeId"));
-                //if (anneeScolaire != null && classe != null)
-
-                    //eleve.addAnneeScolaireClasse(anneeScolaire, classe);
+                Tuteur tuteur = tuteurDAO.getById(resultSet.getInt("tuteurId"));
+                if (tuteur != null)
+                    eleve.addTuteur(tuteur);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }

@@ -212,6 +212,34 @@ public class Init {
                     ")";
             statement.execute(sql);
 
+            // Tuteurs
+
+            sql = "CREATE TABLE IF NOT EXISTS Tuteurs (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "code VARCHAR(100)," +
+                    "nom VARCHAR(100) NOT NULL," +
+                    "deuxiemeNom VARCHAR(100)," +
+                    "prenom VARCHAR(100) NOT NULL," +
+                    "sexe INTEGER NOT NULL," +
+                    "dateNaissance DATE," +
+                    "paysNaissance VARCHAR(100)," +
+                    "villeNaissance VARCHAR(100)," +
+                    "telephone VARCHAR(20)," +
+                    "email VARCHAR(255)," +
+                    "adresseId INTEGER," +
+                    "FOREIGN KEY (adresseId) REFERENCES Adresses(id) " +
+                    ")";
+            statement.execute(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS TuteursEleves (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "eleveId INTEGER NOT NULL," +
+                    "tuteurId INTEGER NOT NULL," +
+                    "FOREIGN KEY (eleveId) REFERENCES Eleves(id)," +
+                    "FOREIGN KEY (tuteurId) REFERENCES Tuteur(id)," +
+                    ")";
+            statement.execute(sql);
+
             // GESTION DU PERSONNEL
 
             sql = "CREATE TABLE IF NOT EXISTS Postes (" +
