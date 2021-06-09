@@ -104,8 +104,8 @@ public class Init {
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "coursId INTEGER NOT NULL," +
                     "uniteEnseignementId INTEGER NOT NULL," +
-                    "FOREIGN KEY (coursId) REFERENCES Cours(Id)," +
-                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(Id)" +
+                    "FOREIGN KEY (coursId) REFERENCES Cours(id)," +
+                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(id)" +
                     ")";
             statement.execute(sql);
 
@@ -151,7 +151,7 @@ public class Init {
                     // "PRIMARY KEY (eleveId, anneeScolaireId)," +
                     "FOREIGN KEY (eleveId) REFERENCES Eleves(id)," +
                     "FOREIGN KEY (anneeScolaireId) REFERENCES AnneesScolaires(id)," +
-                    "FOREIGN KEY (classeId) REFERENCES Classes(Id)" +
+                    "FOREIGN KEY (classeId) REFERENCES Classes(id)" +
                     ")";
             statement.execute(sql);
 
@@ -161,7 +161,7 @@ public class Init {
                     "eleveAnneeScolaireId INTEGER NOT NULL," +
                     "uniteEnseignementId INTEGER NOT NULL," +
                     "FOREIGN KEY (eleveAnneeScolaireId) REFERENCES ElevesAnneesScolaires(id)," +
-                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(Id)" +
+                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(id)" +
                     ")";
             statement.execute(sql);
 
@@ -171,9 +171,44 @@ public class Init {
                     "periodeId INTEGER NOT NULL," +
                     "uniteEnseignementId INTEGER NOT NULL," +
                     "classeId INTEGER NOT NULL," +
-                    "FOREIGN KEY (periodeId) REFERENCES Periodes(Id)," +
-                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(Id)," +
-                    "FOREIGN KEY (classeId) REFERENCES Classes(Id)" +
+                    "FOREIGN KEY (periodeId) REFERENCES Periodes(id)," +
+                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(id)," +
+                    "FOREIGN KEY (classeId) REFERENCES Classes(id)" +
+                    ")";
+            statement.execute(sql);
+
+            // Evaluations
+
+            sql = "CREATE TABLE IF NOT EXISTS TypesEvaluations (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "nom VARCHAR(100) NOT NULL," +
+                    "code VARCHAR(100)" +
+                    ")";
+            statement.execute(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS Evaluations (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "nom VARCHAR(100) NOT NULL," +
+                    "code VARCHAR(100)," +
+                    "anneeScolaireId INTEGER NOT NULL," +
+                    "eleveId INTEGER NOT NULL," +
+                    "classeId INTEGER NOT NULL," +
+                    "sessionId INTEGER NOT NULL," +
+                    "periodeId INTEGER NOT NULL," +
+                    "uniteEnseignementId INTEGER NOT NULL," +
+                    "coursId INTEGER NOT NULL," +
+                    "typeEvaluationId INTEGER NOT NULL," +
+                    "date DATE," +
+                    "note REAL," +
+                    "max REAL," +
+                    "FOREIGN KEY (anneeScolaireId) REFERENCES AnneesScolaires(id)," +
+                    "FOREIGN KEY (eleveId) REFERENCES Eleves(id)," +
+                    "FOREIGN KEY (classeId) REFERENCES Classes(id)," +
+                    "FOREIGN KEY (sessionId) REFERENCES Sessions(id)," +
+                    "FOREIGN KEY (periodeId) REFERENCES Periodes(id)," +
+                    "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(id)," +
+                    "FOREIGN KEY (coursId) REFERENCES Cours(id)," +
+                    "FOREIGN KEY (typeEvaluationId) REFERENCES TypesEvaluations(id)" +
                     ")";
             statement.execute(sql);
 

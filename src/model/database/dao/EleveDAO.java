@@ -128,11 +128,11 @@ public class EleveDAO extends DaoID<Eleve> {
             e.printStackTrace();
             return null;
         }
-        addAnneesScolairesClasses(eleve);
+        addAnneesScolairesInfos(eleve);
         return eleve;
     }
 
-    private void addAnneesScolairesClasses(Eleve eleve) {
+    private void addAnneesScolairesInfos(Eleve eleve) {
         try {
             String sql = "SELECT * FROM ElevesAnneesScolaires WHERE eleveId = ?";
             PreparedStatement statement = connection.prepareStatement(sql,
@@ -145,8 +145,9 @@ public class EleveDAO extends DaoID<Eleve> {
             while (resultSet.next()) {
                 AnneeScolaire anneeScolaire = anneeScolaireDAO.getById(resultSet.getInt("anneeScolaireId"));
                 Classe classe = classeDAO.getById(resultSet.getInt("classeId"));
-                if (anneeScolaire != null && classe != null)
-                    eleve.addAnneeScolaireClasse(anneeScolaire, classe);
+                //if (anneeScolaire != null && classe != null)
+
+                    //eleve.addAnneeScolaireClasse(anneeScolaire, classe);
             }
         } catch (SQLException e) {
             e.printStackTrace();

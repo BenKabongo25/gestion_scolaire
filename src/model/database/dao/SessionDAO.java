@@ -91,7 +91,9 @@ public class SessionDAO extends DaoType1<Session> {
     private void addPeriodes(Session session) {
         try {
             String sql = "SELECT * FROM Periodes WHERE sessionId = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql,
+                    ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY);
             statement.setInt(1, session.getId());
             ResultSet resultSet = statement.executeQuery();
             PeriodeDAO periodeDAO = new PeriodeDAO(connection);

@@ -20,9 +20,7 @@ public class PeriodeDAO extends DaoID<Periode> {
                 " (nom, code, sessionId, periodeId) " +
                 " VALUES (?,?,?,?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, obj.getNom());
             statement.setString(2, obj.getCode());
             statement.setInt(3, obj.getSession().getId());
@@ -41,9 +39,7 @@ public class PeriodeDAO extends DaoID<Periode> {
                 " nom = ?, code = ?, sessionId = ?, periodeId = ? " +
                 " WHERE id = ? ";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, obj.getNom());
             statement.setString(2, obj.getCode());
             statement.setInt(3, obj.getSession().getId());

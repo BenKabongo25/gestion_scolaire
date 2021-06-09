@@ -18,9 +18,7 @@ public class UniteEnseignementDAO extends DaoType1<UniteEnseignement> {
     public boolean create(UniteEnseignement obj) {
         String sql = "INSERT INTO UnitesEnseignements (nom, code) VALUES (?, ?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, obj.getNom());
             statement.setString(2, obj.getCode());
             statement.executeUpdate();
@@ -36,9 +34,7 @@ public class UniteEnseignementDAO extends DaoType1<UniteEnseignement> {
     public boolean update(UniteEnseignement obj) {
         String sql = "UPDATE UnitesEnseignements SET nom = ?, code = ? WHERE id = ?";
         try {
-            PreparedStatement statement = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, obj.getNom());
             statement.setString(2, obj.getCode());
             statement.setInt(3, obj.getId());

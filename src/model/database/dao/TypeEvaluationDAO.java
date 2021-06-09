@@ -1,21 +1,21 @@
 package model.database.dao;
 
-import model.entites.cours.Cours;
+import model.entites.evaluations.TypeEvaluation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CoursDAO extends DaoType1<Cours> {
+public class TypeEvaluationDAO extends DaoType1<TypeEvaluation> {
 
-    public CoursDAO(Connection connection) {
-        super(connection, "Cours");
+    public TypeEvaluationDAO(Connection connection) {
+        super(connection, "TypesEvaluations");
     }
 
     @Override
-    public boolean create(Cours obj) {
-        String sql = "INSERT INTO Cours (nom, code) VALUES (?, ?)";
+    public boolean create(TypeEvaluation obj) {
+        String sql = "INSERT INTO TypesEvaluations (nom, code) VALUES (?, ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, obj.getNom());
@@ -29,8 +29,8 @@ public class CoursDAO extends DaoType1<Cours> {
     }
 
     @Override
-    public boolean update(Cours obj) {
-        String sql = "UPDATE Cours SET nom = ?, code = ? WHERE id = ?";
+    public boolean update(TypeEvaluation obj) {
+        String sql = "UPDATE TypesEvaluations SET nom = ?, code = ? WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, obj.getNom());
@@ -45,23 +45,21 @@ public class CoursDAO extends DaoType1<Cours> {
     }
 
     @Override
-    public boolean delete(Cours obj) {
+    public boolean delete(TypeEvaluation obj) {
         return delete(obj.getId());
     }
 
     @Override
-    protected Cours getInResultSet(ResultSet resultSet) {
-        Cours cours;
+    protected TypeEvaluation getInResultSet(ResultSet resultSet) {
         try {
-            cours = new Cours(
+            return new TypeEvaluation(
                     resultSet.getInt("id"),
                     resultSet.getString("nom"),
                     resultSet.getString("code")
             );
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         }
-        return cours;
+        return null;
     }
 }
