@@ -15,27 +15,24 @@ public abstract class DAO<T> {
         this.connection = connection;
     }
 
-    public abstract boolean create(T obj);
-    public abstract boolean update(T obj);
-    public abstract boolean delete(T obj);
-    public abstract boolean delete(int id);
-    public abstract T getById(int id);
-    protected abstract T getInResultSet(ResultSet resultSet);
+    public abstract void create(T obj) throws SQLException;
+    public abstract void update(T obj) throws SQLException;
+    public abstract void delete(T obj) throws SQLException;
+    public abstract void delete(int id) throws SQLException;
+    public abstract T getById(int id) throws SQLException;
+    public abstract List<T> all() throws SQLException;
+    protected abstract T getInResultSet(ResultSet resultSet) throws SQLException;
 
-    protected List<T> getBySqlRequest(String sql) {
+    protected List<T> getBySqlRequest(String sql) throws SQLException {
         List<T> ts = new ArrayList<>();
-        try {
-            Statement statement = connection.createStatement(
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                T t = getInResultSet(resultSet);
-                if (t != null)
-                    ts.add(t);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Statement statement = connection.createStatement(
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY);
+        ResultSet resultSet = statement.executeQuery(sql);
+        while (resultSet.next()) {
+            T t = getInResultSet(resultSet);
+            if (t != null)
+                ts.add(t);
         }
         return ts;
     }

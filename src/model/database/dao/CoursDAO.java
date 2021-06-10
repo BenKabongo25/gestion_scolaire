@@ -1,6 +1,6 @@
 package model.database.dao;
 
-import model.entites.cours.Cours;
+import model.objects.cours.Cours;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,54 +14,34 @@ public class CoursDAO extends DaoType1<Cours> {
     }
 
     @Override
-    public boolean create(Cours obj) {
+    public void create(Cours obj) throws SQLException {
         String sql = "INSERT INTO Cours (nom, code) VALUES (?, ?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean update(Cours obj) {
+    public void update(Cours obj) throws SQLException {
         String sql = "UPDATE Cours SET nom = ?, code = ? WHERE id = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.setInt(3, obj.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.setInt(3, obj.getId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean delete(Cours obj) {
-        return delete(obj.getId());
+    public void delete(Cours obj) throws SQLException {
+        delete(obj.getId());
     }
 
     @Override
-    protected Cours getInResultSet(ResultSet resultSet) {
-        Cours cours;
-        try {
-            cours = new Cours(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("code")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return cours;
+    protected Cours getInResultSet(ResultSet resultSet) throws SQLException {
+        return new Cours(
+                resultSet.getInt("id"),
+                resultSet.getString("nom"),
+                resultSet.getString("code"));
     }
 }

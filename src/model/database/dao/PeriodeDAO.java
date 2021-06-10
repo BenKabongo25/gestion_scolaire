@@ -1,7 +1,7 @@
 package model.database.dao;
 
-import model.entites.organisation.Periode;
-import model.entites.organisation.Session;
+import model.objects.organisation.Periode;
+import model.objects.organisation.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,70 +15,45 @@ public class PeriodeDAO extends DaoID<Periode> {
     }
 
     @Override
-    public boolean create(Periode obj) {
+    public void create(Periode obj) throws SQLException {
         String sql = "INSERT INTO Periodes " +
                 " (nom, code, sessionId, periodeId) " +
                 " VALUES (?,?,?,?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.setInt(3, obj.getSession().getId());
-            statement.setInt(4, obj.getPeriodeId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.setInt(3, obj.getSession().getId());
+        statement.setInt(4, obj.getPeriodeId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean update(Periode obj) {
+    public void update(Periode obj) throws SQLException {
         String sql = "UPDATE Periodes SET " +
                 " nom = ?, code = ?, sessionId = ?, periodeId = ? " +
                 " WHERE id = ? ";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.setInt(3, obj.getSession().getId());
-            statement.setInt(4, obj.getPeriodeId());
-            statement.setInt(5, obj.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.setInt(3, obj.getSession().getId());
+        statement.setInt(4, obj.getPeriodeId());
+        statement.setInt(5, obj.getId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean delete(Periode obj) {
-        return delete(obj.getId());
+    public void delete(Periode obj) throws SQLException {
+        delete(obj.getId());
     }
 
     @Override
-    protected Periode getInResultSet(ResultSet resultSet) {
-        Periode periode;
-        Session session = new Session();
-        try {
-            session = new SessionDAO(connection).getById(resultSet.getInt("sessionId"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            periode = new Periode(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("code"),
-                    session,
-                    resultSet.getInt("periodeId")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return periode;
+    protected Periode getInResultSet(ResultSet resultSet) throws SQLException {
+        return new Periode(
+                resultSet.getInt("id"),
+                resultSet.getString("nom"),
+                resultSet.getString("code"),
+                new SessionDAO(connection).getById(resultSet.getInt("sessionId")),
+                resultSet.getInt("periodeId")
+        );
     }
 }

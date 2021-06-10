@@ -8,7 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.database.DatabaseConnection;
 import model.database.dao.UtilisateurDAO;
-import model.utilisateurs.Utilisateur;
+import model.objects.utilisateurs.Utilisateur;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -68,7 +68,7 @@ public class LoginController implements Initializable {
                         " mot de passe, veuillez cliquer sur <mot de passe oublié>.");
                 alert.showAndWait();
             } else {
-                if (utilisateur.getType() == Utilisateur.Type.ADMINISTRATEUR) {
+                if (true) {
                     // administrateur
 
                 } else {

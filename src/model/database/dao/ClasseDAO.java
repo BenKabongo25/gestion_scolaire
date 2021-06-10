@@ -1,10 +1,10 @@
 package model.database.dao;
 
-import model.entites.classes.Classe;
-import model.entites.classes.Section;
-import model.entites.organisation.AnneeScolaire;
-import model.entites.organisation.Organisation;
-import model.entites.personnes.eleves.Eleve;
+import model.objects.classes.Classe;
+import model.objects.classes.Section;
+import model.objects.organisation.AnneeScolaire;
+import model.objects.organisation.Organisation;
+import model.objects.personnes.eleves.Eleve;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,104 +18,70 @@ public class ClasseDAO extends DaoID<Classe> {
     }
 
     @Override
-    public boolean create(Classe obj) {
+    public void create(Classe obj) throws SQLException {
         String sql = "INSERT INTO Classes " +
                 " (nom, numero, label, code, sectionId, organisationId) VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setInt(2, obj.getNumero());
-            statement.setString(3, obj.getLabel());
-            statement.setString(4, obj.getCode());
-            statement.setInt(5, obj.getSection().getId());
-            statement.setInt(6, obj.getOrganisation().getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setInt(2, obj.getNumero());
+        statement.setString(3, obj.getLabel());
+        statement.setString(4, obj.getCode());
+        statement.setInt(5, obj.getSection().getId());
+        statement.setInt(6, obj.getOrganisation().getId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean update(Classe obj) {
+    public void update(Classe obj) throws SQLException {
         String sql = "UPDATE Classes SET " +
                 " nom = ?, numero = ?, label = ?, code = ?, sectionId = ?, organisationId = ? " +
                 " WHERE id = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setInt(2, obj.getNumero());
-            statement.setString(3, obj.getLabel());
-            statement.setString(4, obj.getCode());
-            statement.setInt(5, obj.getSection().getId());
-            statement.setInt(6, obj.getOrganisation().getId());
-            statement.setInt(7, obj.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setInt(2, obj.getNumero());
+        statement.setString(3, obj.getLabel());
+        statement.setString(4, obj.getCode());
+        statement.setInt(5, obj.getSection().getId());
+        statement.setInt(6, obj.getOrganisation().getId());
+        statement.setInt(7, obj.getId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean delete(Classe obj) {
-        return delete(obj.getId());
+    public void delete(Classe obj) throws SQLException {
+        delete(obj.getId());
     }
 
     @Override
-    protected Classe getInResultSet(ResultSet resultSet) {
-        Classe classe;
-        Organisation organisation = new Organisation();
-        Section section = new Section();
-        try {
-            organisation = new OrganisationDAO(connection).getById(resultSet.getInt("organisationId"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            section = new SectionDAO(connection).getById(resultSet.getInt("sectionId"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            classe = new Classe(
-                    resultSet.getInt("id"),
-                    organisation,
-                    section,
-                    resultSet.getInt("numéro"),
-                    resultSet.getString("label"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("code")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    protected Classe getInResultSet(ResultSet resultSet) throws SQLException {
+        Classe classe = new Classe(
+                resultSet.getInt("id"),
+                new OrganisationDAO(connection).getById(resultSet.getInt("organisationId")),
+                new SectionDAO(connection).getById(resultSet.getInt("sectionId")),
+                resultSet.getInt("numéro"),
+                resultSet.getString("label"),
+                resultSet.getString("nom"),
+                resultSet.getString("code")
+                );
         addAnneesScolairesEleves(classe);
         return classe;
     }
 
-    private void addAnneesScolairesEleves(Classe classe) {
-        try {
-            String sql = "SELECT * FROM ElevesAnneesScolaires WHERE classeId = ?";
-            PreparedStatement statement = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            statement.setInt(1, classe.getId());
-            ResultSet resultSet = statement.executeQuery();
-            AnneeScolaireDAO anneeScolaireDAO = new AnneeScolaireDAO(connection);
-            EleveDAO eleveDAO = new EleveDAO(connection);
-            while (resultSet.next()) {
-                AnneeScolaire anneeScolaire = anneeScolaireDAO
-                        .getById(resultSet.getInt("anneeScolaireId"));
-                Eleve eleve = eleveDAO.getById(resultSet.getInt("eleveId"));
-                if (anneeScolaire != null && eleve != null)
-                    classe.addAnneeScolaireEleve(anneeScolaire, eleve);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void addAnneesScolairesEleves(Classe classe) throws SQLException {
+        String sql = "SELECT * FROM ElevesAnneesScolaires WHERE classeId = ?";
+        PreparedStatement statement = connection.prepareStatement(sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY);
+        statement.setInt(1, classe.getId());
+        ResultSet resultSet = statement.executeQuery();
+        AnneeScolaireDAO anneeScolaireDAO = new AnneeScolaireDAO(connection);
+        EleveDAO eleveDAO = new EleveDAO(connection);
+        while (resultSet.next()) {
+            AnneeScolaire anneeScolaire = anneeScolaireDAO
+                    .getById(resultSet.getInt("anneeScolaireId"));
+            Eleve eleve = eleveDAO.getById(resultSet.getInt("eleveId"));
+            if (anneeScolaire != null && eleve != null)
+                classe.addAnneeScolaireEleve(anneeScolaire, eleve);
         }
     }
 }

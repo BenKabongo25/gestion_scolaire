@@ -1,6 +1,6 @@
 package model.database.dao;
 
-import model.entites.personnes.base.Adresse;
+import model.objects.personnes.base.Adresse;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,65 +14,48 @@ public class AdresseDAO extends DaoID<Adresse> {
     }
 
     @Override
-    public boolean create(Adresse obj) {
+    public void create(Adresse obj) throws SQLException {
         String sql = "INSERT INTO Adresses " +
                 " (pays, ville, codepostal, adresse, complement) " +
                 " VALUES (?,?,?,?,?) ";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getPays());
-            statement.setString(2, obj.getVille());
-            statement.setString(3, obj.getCodepostal());
-            statement.setString(4, obj.getAdresse());
-            statement.setString(5, obj.getComplement());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getPays());
+        statement.setString(2, obj.getVille());
+        statement.setString(3, obj.getCodepostal());
+        statement.setString(4, obj.getAdresse());
+        statement.setString(5, obj.getComplement());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean update(Adresse obj) {
+    public void update(Adresse obj) throws SQLException {
         String sql = "UPDATE Adresses SET " +
                 " pays = ?, ville = ?, codepostal = ?, adresse = ?, complement = ? " +
                 " WHERE id = ? ";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getPays());
-            statement.setString(2, obj.getVille());
-            statement.setString(3, obj.getCodepostal());
-            statement.setString(4, obj.getAdresse());
-            statement.setString(5, obj.getComplement());
-            statement.setInt(6, obj.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getPays());
+        statement.setString(2, obj.getVille());
+        statement.setString(3, obj.getCodepostal());
+        statement.setString(4, obj.getAdresse());
+        statement.setString(5, obj.getComplement());
+        statement.setInt(6, obj.getId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean delete(Adresse obj) {
-        return delete(obj.getId());
+    public void delete(Adresse obj) throws SQLException {
+        delete(obj.getId());
     }
 
     @Override
-    protected Adresse getInResultSet(ResultSet resultSet) {
-        try {
-            return new Adresse(
-                    resultSet.getInt("id"),
-                    resultSet.getString("pays"),
-                    resultSet.getString("ville"),
-                    resultSet.getString("codepostal"),
-                    resultSet.getString("adresse"),
-                    resultSet.getString("complement")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    protected Adresse getInResultSet(ResultSet resultSet) throws SQLException {
+        return new Adresse(
+                resultSet.getInt("id"),
+                resultSet.getString("pays"),
+                resultSet.getString("ville"),
+                resultSet.getString("codepostal"),
+                resultSet.getString("adresse"),
+                resultSet.getString("complement")
+        );
     }
 }

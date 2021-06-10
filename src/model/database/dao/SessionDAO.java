@@ -1,8 +1,8 @@
 package model.database.dao;
 
-import model.entites.organisation.Organisation;
-import model.entites.organisation.Periode;
-import model.entites.organisation.Session;
+import model.objects.organisation.Organisation;
+import model.objects.organisation.Periode;
+import model.objects.organisation.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +16,7 @@ public class SessionDAO extends DaoType1<Session> {
     }
 
     @Override
-    public boolean create(Session obj) {
+    public void create(Session obj) {
         String sql = "INSERT INTO Sessions " +
                 " (nom, code, organisationId, sessionId, nbPeriodes) " +
                 " VALUES (?, ?, ?, ?, ?) ";
@@ -30,13 +30,11 @@ public class SessionDAO extends DaoType1<Session> {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     @Override
-    public boolean update(Session obj) {
+    public void update(Session obj) {
         String sql = "UPDATE Sessions " +
                 " nom = ?, code = ?, organisationId = ?, sessionId = ?, nbPeriodes = ? " +
                 " WHERE id = ? ";
@@ -51,59 +49,41 @@ public class SessionDAO extends DaoType1<Session> {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     @Override
-    public boolean delete(Session obj) {
-        return delete(obj.getId());
+    public void delete(Session obj) throws SQLException {
+        delete(obj.getId());
     }
 
     @Override
-    protected Session getInResultSet(ResultSet resultSet) {
-        Session session;
-        Organisation organisation = new Organisation();
-        try {
-            organisation = new OrganisationDAO(connection)
-                    .getById(resultSet.getInt("organisationId"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            session = new Session(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("code"),
-                    organisation,
-                    resultSet.getInt("sessionId"),
-                    resultSet.getInt("nbPeriodes")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    protected Session getInResultSet(ResultSet resultSet) throws SQLException {
+        Session session = new Session(
+                resultSet.getInt("id"),
+                resultSet.getString("nom"),
+                resultSet.getString("code"),
+                new OrganisationDAO(connection)
+                        .getById(resultSet.getInt("organisationId")),
+                resultSet.getInt("sessionId"),
+                resultSet.getInt("nbPeriodes")
+        );
         addPeriodes(session);
         return session;
     }
 
-    private void addPeriodes(Session session) {
-        try {
-            String sql = "SELECT * FROM Periodes WHERE sessionId = ?";
-            PreparedStatement statement = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            statement.setInt(1, session.getId());
-            ResultSet resultSet = statement.executeQuery();
-            PeriodeDAO periodeDAO = new PeriodeDAO(connection);
-            while (resultSet.next()) {
-                Periode periode = periodeDAO.getById(resultSet.getInt("id"));
-                if (periode != null)
-                    session.addPeriode(periode);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void addPeriodes(Session session) throws SQLException {
+        String sql = "SELECT * FROM Periodes WHERE sessionId = ?";
+        PreparedStatement statement = connection.prepareStatement(sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY);
+        statement.setInt(1, session.getId());
+        ResultSet resultSet = statement.executeQuery();
+        PeriodeDAO periodeDAO = new PeriodeDAO(connection);
+        while (resultSet.next()) {
+            Periode periode = periodeDAO.getById(resultSet.getInt("id"));
+            if (periode != null)
+                session.addPeriode(periode);
         }
     }
 }

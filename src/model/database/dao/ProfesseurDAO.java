@@ -1,43 +1,40 @@
 package model.database.dao;
 
-import model.entites.personnes.personnel.Professeur;
+import model.objects.personnes.personnel.Professeur;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class ProfesseurDAO extends DAO<Professeur> {
+public class ProfesseurDAO extends DaoID<Professeur> {
 
     public ProfesseurDAO(Connection connection) {
         super(connection);
     }
 
     @Override
-    public boolean create(Professeur obj) {
-        return false;
+    public void create(Professeur obj) throws SQLException {
     }
 
     @Override
-    public boolean update(Professeur obj) {
-        return false;
+    public void update(Professeur obj) throws SQLException {
     }
 
     @Override
-    public boolean delete(Professeur obj) {
-        return false;
+    public void delete(Professeur obj) throws SQLException{
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public void delete(int id) throws SQLException {
     }
 
     @Override
-    public Professeur getById(int id) {
+    public Professeur getById(int id) throws SQLException {
         return null;
     }
 
     @Override
-    protected Professeur getInResultSet(ResultSet resultSet) {
+    protected Professeur getInResultSet(ResultSet resultSet) throws SQLException {
         return null;
     }
 }

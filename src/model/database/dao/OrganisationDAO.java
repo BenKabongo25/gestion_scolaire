@@ -1,7 +1,7 @@
 package model.database.dao;
 
-import model.entites.organisation.Organisation;
-import model.entites.organisation.Session;
+import model.objects.organisation.Organisation;
+import model.objects.organisation.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,79 +15,59 @@ public class OrganisationDAO extends DaoType1<Organisation> {
     }
 
     @Override
-    public boolean create(Organisation obj) {
+    public void create(Organisation obj) throws SQLException {
         String sql = "INSERT INTO Organisations " +
                 " (nom, code, nbSessions) " +
                 " VALUES (?, ?, ?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.setInt(3, obj.getNbSessions());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.setInt(3, obj.getNbSessions());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean update(Organisation obj) {
+    public void update(Organisation obj) throws SQLException {
         String sql = "UPDATE Organisations SET " +
                 " nom = ?, code = ?, nbSessions = ? " +
                 " WHERE id = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.setInt(3, obj.getNbSessions());
-            statement.setInt(5, obj.getId());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.setInt(3, obj.getNbSessions());
+        statement.setInt(5, obj.getId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean delete(Organisation obj) {
-        return delete(obj.getId());
+    public void delete(Organisation obj) throws SQLException {
+        delete(obj.getId());
     }
 
     @Override
-    protected Organisation getInResultSet(ResultSet resultSet) {
-        Organisation organisation;
-        try {
-            organisation = new Organisation(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("code"),
-                    resultSet.getInt("nbSessions")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    protected Organisation getInResultSet(ResultSet resultSet) throws SQLException {
+        Organisation organisation = new Organisation(
+                resultSet.getInt("id"),
+                resultSet.getString("nom"),
+                resultSet.getString("code"),
+                resultSet.getInt("nbSessions")
+        );
         addSessions(organisation);
         return organisation;
     }
 
-    private void addSessions(Organisation organisation) {
-        try {
-            String sql = "SELECT * FROM Sessions WHERE organisationId = ?";
-            PreparedStatement statement = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            statement.setInt(1, organisation.getId());
-            ResultSet resultSet = statement.executeQuery();
-            SessionDAO sessionDAO = new SessionDAO(connection);
-            while (resultSet.next()) {
-                Session session = sessionDAO.getById(resultSet.getInt("id"));
-                if (session != null)
-                    organisation.addSession(session);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void addSessions(Organisation organisation) throws SQLException {
+        String sql = "SELECT * FROM Sessions WHERE organisationId = ?";
+        PreparedStatement statement = connection.prepareStatement(sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY);
+        statement.setInt(1, organisation.getId());
+        ResultSet resultSet = statement.executeQuery();
+        SessionDAO sessionDAO = new SessionDAO(connection);
+        while (resultSet.next()) {
+            Session session = sessionDAO.getById(resultSet.getInt("id"));
+            if (session != null)
+                organisation.addSession(session);
         }
     }
 }

@@ -1,6 +1,6 @@
 package model.database.dao;
 
-import model.entites.evaluations.TypeEvaluation;
+import model.objects.evaluations.TypeEvaluation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,52 +14,35 @@ public class TypeEvaluationDAO extends DaoType1<TypeEvaluation> {
     }
 
     @Override
-    public boolean create(TypeEvaluation obj) {
+    public void create(TypeEvaluation obj) throws SQLException {
         String sql = "INSERT INTO TypesEvaluations (nom, code) VALUES (?, ?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean update(TypeEvaluation obj) {
+    public void update(TypeEvaluation obj) throws SQLException {
         String sql = "UPDATE TypesEvaluations SET nom = ?, code = ? WHERE id = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, obj.getNom());
-            statement.setString(2, obj.getCode());
-            statement.setInt(3, obj.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, obj.getNom());
+        statement.setString(2, obj.getCode());
+        statement.setInt(3, obj.getId());
+        statement.executeUpdate();
     }
 
     @Override
-    public boolean delete(TypeEvaluation obj) {
-        return delete(obj.getId());
+    public void delete(TypeEvaluation obj) throws SQLException {
+        delete(obj.getId());
     }
 
     @Override
-    protected TypeEvaluation getInResultSet(ResultSet resultSet) {
-        try {
-            return new TypeEvaluation(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("code")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected TypeEvaluation getInResultSet(ResultSet resultSet) throws SQLException {
+        return new TypeEvaluation(
+                resultSet.getInt("id"),
+                resultSet.getString("nom"),
+                resultSet.getString("code")
+        );
     }
 }
