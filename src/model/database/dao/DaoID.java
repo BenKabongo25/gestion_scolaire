@@ -19,7 +19,6 @@ public abstract class DaoID <T> extends DAO <T> {
         this.table = table;
     }
 
-    @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM " + table + " WHERE id = ? ";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -27,7 +26,6 @@ public abstract class DaoID <T> extends DAO <T> {
         statement.executeUpdate();
     }
 
-    @Override
     public T getById(int id) throws SQLException {
         String sql = "SELECT * FROM " + table + " WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(sql,

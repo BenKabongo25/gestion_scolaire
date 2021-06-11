@@ -11,7 +11,7 @@ public final class DatabaseConnection {
     public static Connection getInstance() {
         if (connection == null) {
             try {
-                connection = DriverManager.getConnection("jdbc:sqlite:../../databasetests.db");
+                connection = DriverManager.getConnection("jdbc:sqlite:../../databasetests01.db");
             } catch (SQLException e) {
                 e.printStackTrace();
             }

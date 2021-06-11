@@ -11,6 +11,7 @@ import model.database.dao.UtilisateurDAO;
 import model.objects.utilisateurs.Utilisateur;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -49,8 +50,20 @@ public class LoginController implements Initializable {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        UtilisateurDAO utilisateurDAO = new UtilisateurDAO(DatabaseConnection.getInstance());
-        Utilisateur utilisateur = utilisateurDAO.getByUsername(username);
+        Utilisateur utilisateur = null;
+        try {
+            UtilisateurDAO utilisateurDAO = new UtilisateurDAO(DatabaseConnection.getInstance());
+            utilisateur = utilisateurDAO.getByUsername(username);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Une erreur est survenue lors de la connexion à la base de données");
+            alert.setContentText("Nous avons rencontré un problème lors de la connexion à la base de données. " +
+                    "Veuillez relancer le logiciel. Si le problème persiste, veuillez contacter l'assistance " +
+                    "technique.");
+            alert.showAndWait();
+            return;
+        }
 
         if (utilisateur == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -85,8 +98,20 @@ public class LoginController implements Initializable {
         usernameField.setText(usernameField.getText().trim());
         String username = usernameField.getText();
 
-        UtilisateurDAO utilisateurDAO = new UtilisateurDAO(DatabaseConnection.getInstance());
-        Utilisateur utilisateur = utilisateurDAO.getByUsername(username);
+        Utilisateur utilisateur = null;
+        try {
+            UtilisateurDAO utilisateurDAO = new UtilisateurDAO(DatabaseConnection.getInstance());
+            utilisateur = utilisateurDAO.getByUsername(username);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Une erreur est survenue lors de la connexion à la base de données");
+            alert.setContentText("Nous avons rencontré un problème lors de la connexion à la base de données. " +
+                    "Veuillez relancer le logiciel. Si le problème persiste, veuillez contacter l'assistance " +
+                    "technique.");
+            alert.showAndWait();
+            return;
+        }
 
         Alert alert;
         if (utilisateur == null) {

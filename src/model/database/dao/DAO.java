@@ -18,8 +18,6 @@ public abstract class DAO<T> {
     public abstract void create(T obj) throws SQLException;
     public abstract void update(T obj) throws SQLException;
     public abstract void delete(T obj) throws SQLException;
-    public abstract void delete(int id) throws SQLException;
-    public abstract T getById(int id) throws SQLException;
     public abstract List<T> all() throws SQLException;
     protected abstract T getInResultSet(ResultSet resultSet) throws SQLException;
 
