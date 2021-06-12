@@ -1,6 +1,5 @@
 package model.database.dao;
 
-import model.objects.personnes.base.Adresse;
 import model.objects.personnes.base.Sexe;
 import model.objects.personnes.eleves.Eleve;
 import model.objects.personnes.eleves.Tuteur;

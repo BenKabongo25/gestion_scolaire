@@ -1,6 +1,6 @@
-package model.objects.personnes.base;
+package model.objects.adresse;
 
-import model.objects.utils.Identifable;
+import model.objects.base.Identifable;
 
 import java.util.Objects;
 

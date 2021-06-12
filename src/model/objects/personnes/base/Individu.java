@@ -1,6 +1,7 @@
 package model.objects.personnes.base;
 
-import model.objects.utils.Identifable;
+import model.objects.adresse.Adresse;
+import model.objects.base.Identifable;
 
 import java.sql.Date;
 import java.util.Objects;

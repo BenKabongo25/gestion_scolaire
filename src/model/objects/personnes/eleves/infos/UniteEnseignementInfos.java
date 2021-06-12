@@ -2,7 +2,7 @@ package model.objects.personnes.eleves.infos;
 
 import model.objects.cours.Cours;
 import model.objects.cours.UniteEnseignement;
-import model.objects.utils.OneToMany;
+import model.objects.base.OneToMany;
 
 import java.util.Set;
 

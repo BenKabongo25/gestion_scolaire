@@ -1,6 +1,6 @@
 package model.objects.cours;
 
-import model.objects.utils.Type1;
+import model.objects.base.Type1;
 
 public class Cours extends Type1 {
 

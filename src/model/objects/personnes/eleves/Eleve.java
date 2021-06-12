@@ -1,6 +1,6 @@
 package model.objects.personnes.eleves;
 
-import model.objects.personnes.base.Adresse;
+import model.objects.adresse.Adresse;
 import model.objects.personnes.base.Individu;
 import model.objects.personnes.base.Sexe;
 import model.objects.personnes.eleves.infos.EleveInfos;

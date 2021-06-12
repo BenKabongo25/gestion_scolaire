@@ -1,6 +1,6 @@
 package model.objects.organisation;
 
-import model.objects.utils.Identifable;
+import model.objects.base.Identifable;
 
 import java.sql.Date;
 import java.util.Objects;

@@ -11,6 +11,30 @@ public class Init {
         Statement statement = connection.createStatement();
         String sql;
 
+        // BASE
+
+        sql = "CREATE TABLE IF NOT EXISTS Adresses (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "pays VARCHAR(100)," +
+                "ville VARCHAR(100)," +
+                "codepostal VARCHAR(100)," +
+                "adresse VARCHAR(100)," +
+                "complement VARCHAR(100)" +
+                ")";
+        statement.execute(sql);
+
+        // ECOLE : Informations
+
+        sql = "CREATE TABLE IF NOT EXISTS Ecole (" +
+                "nom VARCHAR(100) NOT NULL," +
+                "sigle VARCHAR(100)," +
+                "telephone VARCHAR(20)," +
+                "email VARCHAR(255)," +
+                "adresseId INTEGER," +
+                "FOREIGN KEY (adresseId) REFERENCES Adresses(id)" +
+                ")";
+        statement.execute(sql);
+
         // GESTION DES ELEVES
 
         // Années scolaires, organisations, sessions, périodes
@@ -104,18 +128,6 @@ public class Init {
                 "PRIMARY KEY (coursId, uniteEnseignementId)," +
                 "FOREIGN KEY (coursId) REFERENCES Cours(id)," +
                 "FOREIGN KEY (uniteEnseignementId) REFERENCES UnitesEnseignements(id)" +
-                ")";
-        statement.execute(sql);
-
-        // Adresses et informations personnelles sur les personnes
-
-        sql = "CREATE TABLE IF NOT EXISTS Adresses (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "pays VARCHAR(100)," +
-                "ville VARCHAR(100)," +
-                "codepostal VARCHAR(100)," +
-                "adresse VARCHAR(100)," +
-                "complement VARCHAR(100)" +
                 ")";
         statement.execute(sql);
 

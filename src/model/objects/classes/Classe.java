@@ -1,6 +1,6 @@
 package model.objects.classes;
 
-import model.objects.utils.Identifable;
+import model.objects.base.Identifable;
 import model.objects.organisation.AnneeScolaire;
 import model.objects.organisation.Organisation;
 import model.objects.personnes.eleves.Eleve;

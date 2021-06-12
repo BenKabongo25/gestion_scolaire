@@ -1,4 +1,4 @@
-package model.objects.utils;
+package model.objects.base;
 
 public abstract class Identifable {
 

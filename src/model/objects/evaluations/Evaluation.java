@@ -2,7 +2,7 @@ package model.objects.evaluations;
 
 import model.objects.cours.UniteEnseignement;
 import model.objects.organisation.Session;
-import model.objects.utils.Type1;
+import model.objects.base.Type1;
 import model.objects.organisation.AnneeScolaire;
 import model.objects.organisation.Periode;
 import model.objects.classes.Classe;

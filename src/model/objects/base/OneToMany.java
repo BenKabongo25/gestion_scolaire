@@ -1,4 +1,4 @@
-package model.objects.utils;
+package model.objects.base;
 
 import java.util.HashSet;
 import java.util.Set;

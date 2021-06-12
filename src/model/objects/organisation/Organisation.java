@@ -1,6 +1,6 @@
 package model.objects.organisation;
 
-import model.objects.utils.Type1;
+import model.objects.base.Type1;
 
 import java.util.HashSet;
 import java.util.Set;

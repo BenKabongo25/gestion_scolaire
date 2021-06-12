@@ -1,6 +1,6 @@
 package model.database.dao;
 
-import model.objects.personnes.base.Adresse;
+import model.objects.adresse.Adresse;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

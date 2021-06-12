@@ -1,6 +1,6 @@
 package model.objects.evaluations;
 
-import model.objects.utils.Type1;
+import model.objects.base.Type1;
 
 public class TypeEvaluation extends Type1 {
 
